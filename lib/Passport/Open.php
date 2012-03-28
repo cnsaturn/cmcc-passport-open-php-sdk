@@ -162,4 +162,31 @@ class Passport_Open
 		$this->_consumer->redirect();
 		return TRUE;
 	}
+
+	/**
+	 * 获取用户基本信息
+	 *
+	 * @return array
+	 */
+	public function getUserProfile()
+	{
+		// 设置 API 路径
+		$this->_client->setUri(self::API_ENDPOINT_URL . '/user/profile');
+		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
+		$this->_client->setMethod(Zend_Http_Client::GET);
+		// 获取响应数据
+		$response = $this->_client->request();
+		// 解析 HTTP Body
+		$content = $response->getBody();
+
+		// 正常响应内容默认以 Json 数据格式返回
+		require_once('Zend/Json.php');
+
+		if( ! self::DEBUG)
+		{
+			return Zend_Json::decode($content);
+		}
+
+		echo Zend_Json::prettyPrint($content, array("indent" => " "));
+	}
 }
