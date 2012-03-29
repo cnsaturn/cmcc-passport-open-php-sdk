@@ -40,12 +40,13 @@ class Passport_Open
 	/**
 	 * API URI 前缀
 	 */
-	const API_ENDPOINT_URL = 'http://120.197.230.234/passport/api';
-
+//	const API_ENDPOINT_URL = 'http://120.197.230.234/passport/api';
+	const API_ENDPOINT_URL = 'http://passport.local/api';
 	/**
 	 * OAuth 鉴权 URI 前缀
 	 */
-	const OAUTH_ENDPOINT_URL = 'http://120.197.230.234/passport/oauth';
+//	const OAUTH_ENDPOINT_URL = 'http://120.197.230.234/passport/oauth';
+	const OAUTH_ENDPOINT_URL = 'http://passport.local/oauth';
 
 	/**
 	 * OAuth 1.0a 鉴权参数
@@ -61,7 +62,7 @@ class Passport_Open
 	 */
 	protected $_consumer;
 
-	/**
+	/**demodemo
 	 * OAuth Token 令牌对象
 	 *
 	 * @var Zend_Oauth_Token
@@ -262,18 +263,6 @@ class Passport_Open
 	public function deleteUserRecipient($id)
 	{
 		return $this->_makeRequest("/recipients/id/$id", Zend_Http_Client::DELETE);
-	}
-
-	/**
-	 * 删除指定职业信息
-	 *
-	 *
-	 * @param  int $id 职业信息条目ID
-	 * @return bool TRUE表示删除成功，FALSE则删除失败
-	 */
-	public function deleteUserCareer($id)
-	{
-		return $this->_makeRequest("/careers/id/$id", Zend_Http_Client::DELETE);
 	}
 
 	/**
