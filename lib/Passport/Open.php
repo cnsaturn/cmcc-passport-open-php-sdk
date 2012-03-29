@@ -38,7 +38,7 @@
 class Passport_Open
 {
 	/**
-	 * 是否DEBUG 模式
+	 * 是否 DEBUG 模式
 	 */
 	const DEBUG = FALSE;
 
@@ -155,7 +155,7 @@ class Passport_Open
 		$this->_token = $this->_consumer->getRequestToken();
 
 		// 将 Request Token 临时存储起来
-		$_SESSION ['REQUEST_TOKEN'] = serialize($this->_token);
+		$_SESSION['REQUEST_TOKEN'] = serialize($this->_token);
 
 		// 跳转到用户授权页面，等待用户授权操作
 		// 用户授权成功后，将返回本地所设置的 callback 地址
@@ -164,14 +164,24 @@ class Passport_Open
 	}
 
 	/**
-	 * 获取用户基本信息
+	 * 获取用户数据; 通过 HTTP GET 方法获取用户基本信息(profile)、用户职业信息(careers)、
+	 * 用户收件地址(recipients)和用户联系人信息(contacts)
 	 *
+	 *
+     * @param  string $api 支持API：{'profile', 'careers', 'recipients', 'contacts'}
 	 * @return array
 	 */
-	public function getUserProfile()
+	public function getUserData($api = 'profile')
 	{
+		// 是否支持指定 $api
+		$api = strtolower($api);
+		if( ! in_array($api, array('profile', 'careers', 'recipients', 'contacts')))
+		{
+			return FALSE;
+		}
+
 		// 设置 API 路径
-		$this->_client->setUri(self::API_ENDPOINT_URL . '/user/profile');
+		$this->_client->setUri(self::API_ENDPOINT_URL . "/user/$api");
 		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
 		$this->_client->setMethod(Zend_Http_Client::GET);
 		// 获取响应数据
