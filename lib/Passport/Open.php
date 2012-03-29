@@ -38,11 +38,6 @@
 class Passport_Open
 {
 	/**
-	 * 是否 DEBUG 模式
-	 */
-	const DEBUG = TRUE;
-
-	/**
 	 * API URI 前缀
 	 */
 	const API_ENDPOINT_URL = 'http://120.197.230.234/passport/api';
@@ -83,7 +78,7 @@ class Passport_Open
 	/**
 	 * 解析函数用来自定义 OAuth 鉴权参数 $params
 	 *
-	 * @param  array $params		 OAuth鉴权参数
+	 * @param  array $params OAuth鉴权参数
 	 */
 	public function __construct($params)
 	{
@@ -131,7 +126,7 @@ class Passport_Open
 		if(isset($_SESSION['ACCESS_TOKEN']))
 		{
 			// 从 Session 中恢复 Access Token
-			$this->_token = unserialize($_SESSION ['ACCESS_TOKEN']);
+			$this->_token = unserialize($_SESSION['ACCESS_TOKEN']);
 			// 创建符合 OAuth 规范的 http 请求
 			$this->_client = $this->_token->getHttpClient($this->_options);
 			return TRUE;
@@ -180,22 +175,11 @@ class Passport_Open
 			return FALSE;
 		}
 
-		// 发起API请求，获得响应字符串
-		$content = $this->_prepareRequest("/user/$api", Zend_Http_Client::GET);
-
-		// 正常响应内容默认以 Json 数据格式返回
-		require_once('Zend/Json.php');
-
-		if( ! self::DEBUG)
-		{
-			return Zend_Json::decode($content);
-		}
-
-		echo Zend_Json::prettyPrint($content, array("indent" => " "));
+		return $this->_makeRequest("/user/$api", Zend_Http_Client::GET);
 	}
 
 	/**
-	 * 更新当前关联用户基本信息
+	 * 更新当前用户基本信息
 	 *
 	 *
      * @param  array $data 需要更新的信息数组
@@ -203,41 +187,152 @@ class Passport_Open
 	 */
 	public function updateUserProfile($data)
 	{
-		// 正常响应内容默认以 Json 数据格式返回
-		require_once('Zend/Json.php');
+		return $this->_makeRequest('/user/profile', Zend_Http_Client::PUT, $data);
+	}
 
-		// 发起API请求，获得响应字符串
-		$content = $this->_prepareRequest(
-			'/user/profile', 
-			Zend_Http_Client::PUT, 
-			Zend_Json::encode($data)
-		);
+	/**
+	 * 创建当前用户新的职业信息
+	 *
+	 *
+     * @param  array $data 新的信息数组
+	 * @return array 创建成功后的职业信息
+	 */
+	public function createUserCareer($data)
+	{
+		return $this->_makeRequest('/user/careers', Zend_Http_Client::POST, $data);
+	}
 
-		if( ! self::DEBUG)
-		{
-			return Zend_Json::decode($content);
-		}
+	/**
+	 * 更新当前用户职业信息
+	 *
+	 *
+     * @param  int $id 职业信息条目ID
+     * @param  array $data 需要更新的信息数组
+	 * @return array 更新后的信息条目
+	 */
+	public function updateUserCareer($id, $data)
+	{
+		return $this->_makeRequest("/careers/id/$id", Zend_Http_Client::PUT, $data);
+	}
 
-		echo Zend_Json::prettyPrint($content, array("indent" => " "));
+	/**
+	 * 删除当前用户职业信息
+	 *
+	 *
+     * @param  int $id 职业信息条目ID
+	 * @return bool TRUE表示删除成功，FALSE则删除失败
+	 */
+	public function deleteUserCareer($id)
+	{
+		return $this->_makeRequest("/careers/id/$id", Zend_Http_Client::DELETE);
+	}
+
+	/**
+	 * 创建当前用户收件地址
+	 *
+	 *
+     * @param  array $data 新的信息数组
+	 * @return array 创建成功后的收件地址
+	 */
+	public function createUserRecipient($data)
+	{
+		return $this->_makeRequest('/user/recipients', Zend_Http_Client::POST, $data);
+	}
+
+	/**
+	 * 更新当前用户收件地址
+	 *
+	 *
+     * @param  int $id 收件地址条目ID
+     * @param  array $data 需要更新的信息数组
+	 * @return array 更新后的收件地址
+	 */
+	public function updateUserRecipient($id, $data)
+	{
+		return $this->_makeRequest("/recipients/id/$id", Zend_Http_Client::PUT, $data);
+	}
+
+	/**
+	 * 删除当前用户指定收件地址
+	 *
+	 *
+     * @param  int $id 收件地址条目ID
+	 * @return bool TRUE表示删除成功，FALSE则删除失败
+	 */
+	public function deleteUserRecipient($id)
+	{
+		return $this->_makeRequest("/recipients/id/$id", Zend_Http_Client::DELETE);
+	}
+
+	/**
+	 * 删除指定职业信息
+	 *
+	 *
+     * @param  int $id 职业信息条目ID
+	 * @return bool TRUE表示删除成功，FALSE则删除失败
+	 */
+	public function deleteUserCareer($id)
+	{
+		return $this->_makeRequest("/careers/id/$id", Zend_Http_Client::DELETE);
+	}
+
+	/**
+	 * 创建当前用户新的联系人
+	 *
+	 *
+     * @param  array $data 新的信息数组
+	 * @return array 创建成功后的联系人条目
+	 */
+	public function createUserContact($data)
+	{
+		return $this->_makeRequest('/user/contacts', Zend_Http_Client::POST, $data);
+	}
+
+	/**
+	 * 更新当前用户指定联系人
+	 *
+	 *
+     * @param  int $id 联系人条目ID
+     * @param  array $data 需要更新的信息数组
+	 * @return array 更新后的联系人
+	 */
+	public function updateUserContact($id, $data)
+	{
+		return $this->_makeRequest("/contacts/id/$id", Zend_Http_Client::PUT, $data);
+	}
+
+	/**
+	 * 删除当前用户指定联系人
+	 *
+	 *
+     * @param  int $id 收件地址条目ID
+	 * @return bool TRUE表示删除成功，FALSE则删除失败
+	 */
+	public function deleteUserContact($id)
+	{
+		return $this->_makeRequest("/contacts/id/$id", Zend_Http_Client::DELETE);
 	}
 
     /**
      * 发起指定 API 请求
      *
      * @param  string $api API路径
-     * @param  string $method 请求方法方法
-     * @param  string $rawPayLoad 经过处理和合理编码后的http内容
-     * @return string API响应
-     * @throws Zend_Http_Client_Exception
+     * @param  string $method http请求Verbs方法
+     * @param  string|array $PayLoadData 经过处理和合理编码后的http内容或数组
+     * @return array|bool  解析后的API响应数据数组；或TRUE表示删除成功
      */
-	private function _prepareRequest($api, $method, $rawPayLoad = null)
+	private function _makeRequest($api, $method, $PayLoadData = null)
 	{
+		// 正常响应内容默认以 Json 数据格式返回
+		require_once('Zend/Json.php');
+
 		// 设置 API 路径
 		$this->_client->setUri(self::API_ENDPOINT_URL . $api);
 		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
 		$this->_client->setMethod($method);
 		// 设置 HTTP 请求数据类型
 		$this->_client->setHeaders('Content-Type', 'application/json');
+		
 		// 设置 HTTP Body Payload
 		switch ($method) 
 		{
@@ -246,12 +341,31 @@ class Passport_Open
                 break;
             case Zend_Http_Client::PUT:
             case Zend_Http_Client::POST:
-                $this->_client->setRawData($rawPayLoad);
+                $this->_client->setRawData(
+                	is_array($PayLoadData) 
+                	? Zend_Json::encode($PayLoadData) 
+                	: $PayLoadData
+                );
                 break;
         }
+		
 		// 获取响应数据
 		$response = $this->_client->request();
 		// 解析 HTTP Body Payload
-		return $response->getBody();
+		$content = $response->getBody();
+		// HTTP 响应码
+		$status = $response->getStatus();
+
+		// 根据 HTTP Body Payload 返回数据
+		switch ($status) 
+		{
+			// 删除成功返回TRUE
+            case '204':
+            	return TRUE;
+                break;
+            // 其他操作直接返回解析后的http payload内容
+            default:
+                return Zend_Json::decode($content);
+        }
 	}
 }
