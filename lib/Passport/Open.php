@@ -180,14 +180,8 @@ class Passport_Open
 			return FALSE;
 		}
 
-		// 设置 API 路径
-		$this->_client->setUri(self::API_ENDPOINT_URL . "/user/$api");
-		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
-		$this->_client->setMethod(Zend_Http_Client::GET);
-		// 获取响应数据
-		$response = $this->_client->request();
-		// 解析 HTTP Body
-		$content = $response->getBody();
+		// 发起API请求，获得响应字符串
+		$content = $this->_prepareRequest("/user/$api", Zend_Http_Client::GET);
 
 		// 正常响应内容默认以 Json 数据格式返回
 		require_once('Zend/Json.php');
@@ -211,20 +205,13 @@ class Passport_Open
 	{
 		// 正常响应内容默认以 Json 数据格式返回
 		require_once('Zend/Json.php');
-		$rawData = Zend_Json::encode($data); 
 
-		// 设置 API 路径
-		$this->_client->setUri(self::API_ENDPOINT_URL . '/user/profile');
-		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
-		$this->_client->setMethod(Zend_Http_Client::PUT);
-		// 设置 HTTP 请求数据类型
-		$this->_client->setHeaders('Content-Type', 'application/json');
-		// 设置 HTTP Body Payload
-		$this->_client->setRawData($rawData);
-		// 获取响应数据
-		$response = $this->_client->request();
-		// 解析 HTTP Body Payload
-		$content = $response->getBody();
+		// 发起API请求，获得响应字符串
+		$content = $this->_prepareRequest(
+			'/user/profile', 
+			Zend_Http_Client::PUT, 
+			Zend_Json::encode($data)
+		);
 
 		if( ! self::DEBUG)
 		{
@@ -232,5 +219,39 @@ class Passport_Open
 		}
 
 		echo Zend_Json::prettyPrint($content, array("indent" => " "));
+	}
+
+    /**
+     * 发起指定 API 请求
+     *
+     * @param  string $api API路径
+     * @param  string $method 请求方法方法
+     * @param  string $rawPayLoad 经过处理和合理编码后的http内容
+     * @return string API响应
+     * @throws Zend_Http_Client_Exception
+     */
+	private function _prepareRequest($api, $method, $rawPayLoad = null)
+	{
+		// 设置 API 路径
+		$this->_client->setUri(self::API_ENDPOINT_URL . $api);
+		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
+		$this->_client->setMethod($method);
+		// 设置 HTTP 请求数据类型
+		$this->_client->setHeaders('Content-Type', 'application/json');
+		// 设置 HTTP Body Payload
+		switch ($method) 
+		{
+            case Zend_Http_Client::GET:
+            case Zend_Http_Client::DELETE:
+                break;
+            case Zend_Http_Client::PUT:
+            case Zend_Http_Client::POST:
+                $this->_client->setRawData($rawPayLoad);
+                break;
+        }
+		// 获取响应数据
+		$response = $this->_client->request();
+		// 解析 HTTP Body Payload
+		return $response->getBody();
 	}
 }
