@@ -40,7 +40,7 @@ class Passport_Open
 	/**
 	 * 是否 DEBUG 模式
 	 */
-	const DEBUG = FALSE;
+	const DEBUG = TRUE;
 
 	/**
 	 * API URI 前缀
@@ -191,6 +191,40 @@ class Passport_Open
 
 		// 正常响应内容默认以 Json 数据格式返回
 		require_once('Zend/Json.php');
+
+		if( ! self::DEBUG)
+		{
+			return Zend_Json::decode($content);
+		}
+
+		echo Zend_Json::prettyPrint($content, array("indent" => " "));
+	}
+
+	/**
+	 * 更新当前关联用户基本信息
+	 *
+	 *
+     * @param  array $data 需要更新的信息数组
+	 * @return array 更新后的用户基本信息
+	 */
+	public function updateUserProfile($data)
+	{
+		// 正常响应内容默认以 Json 数据格式返回
+		require_once('Zend/Json.php');
+		$rawData = Zend_Json::encode($data); 
+
+		// 设置 API 路径
+		$this->_client->setUri(self::API_ENDPOINT_URL . '/user/profile');
+		// 设置 API HTTP Verbs 方法 (GET, POST, DELETE or PUT)
+		$this->_client->setMethod(Zend_Http_Client::PUT);
+		// 设置 HTTP 请求数据类型
+		$this->_client->setHeaders('Content-Type', 'application/json');
+		// 设置 HTTP Body Payload
+		$this->_client->setRawData($rawData);
+		// 获取响应数据
+		$response = $this->_client->request();
+		// 解析 HTTP Body Payload
+		$content = $response->getBody();
 
 		if( ! self::DEBUG)
 		{
