@@ -78,7 +78,7 @@ class Passport_Open
 	/**
 	 * 解析函数用来自定义 OAuth 鉴权参数 $params
 	 *
-	 * @param  array $params OAuth鉴权参数
+	 * @param	array $params OAuth鉴权参数
 	 */
 	public function __construct($params)
 	{
@@ -163,7 +163,7 @@ class Passport_Open
 	 * 用户收件地址(recipients)和用户联系人信息(contacts)
 	 *
 	 *
-     * @param  string $api 支持API：{'profile', 'careers', 'recipients', 'contacts'}
+	 * @param  string $api 支持API：{'profile', 'careers', 'recipients', 'contacts'}
 	 * @return array
 	 */
 	public function getUserData($api = 'profile')
@@ -182,7 +182,7 @@ class Passport_Open
 	 * 更新当前用户基本信息
 	 *
 	 *
-     * @param  array $data 需要更新的信息数组
+	 * @param  array $data 需要更新的信息数组
 	 * @return array 更新后的用户基本信息
 	 */
 	public function updateUserProfile($data)
@@ -194,7 +194,7 @@ class Passport_Open
 	 * 创建当前用户新的职业信息
 	 *
 	 *
-     * @param  array $data 新的信息数组
+	 * @param  array $data 新的信息数组
 	 * @return array 创建成功后的职业信息
 	 */
 	public function createUserCareer($data)
@@ -206,8 +206,8 @@ class Passport_Open
 	 * 更新当前用户职业信息
 	 *
 	 *
-     * @param  int $id 职业信息条目ID
-     * @param  array $data 需要更新的信息数组
+	 * @param  int $id 职业信息条目ID
+	 * @param  array $data 需要更新的信息数组
 	 * @return array 更新后的信息条目
 	 */
 	public function updateUserCareer($id, $data)
@@ -219,7 +219,7 @@ class Passport_Open
 	 * 删除当前用户职业信息
 	 *
 	 *
-     * @param  int $id 职业信息条目ID
+	 * @param  int $id 职业信息条目ID
 	 * @return bool TRUE表示删除成功，FALSE则删除失败
 	 */
 	public function deleteUserCareer($id)
@@ -231,7 +231,7 @@ class Passport_Open
 	 * 创建当前用户收件地址
 	 *
 	 *
-     * @param  array $data 新的信息数组
+	 * @param  array $data 新的信息数组
 	 * @return array 创建成功后的收件地址
 	 */
 	public function createUserRecipient($data)
@@ -243,8 +243,8 @@ class Passport_Open
 	 * 更新当前用户收件地址
 	 *
 	 *
-     * @param  int $id 收件地址条目ID
-     * @param  array $data 需要更新的信息数组
+	 * @param  int $id 收件地址条目ID
+	 * @param  array $data 需要更新的信息数组
 	 * @return array 更新后的收件地址
 	 */
 	public function updateUserRecipient($id, $data)
@@ -256,7 +256,7 @@ class Passport_Open
 	 * 删除当前用户指定收件地址
 	 *
 	 *
-     * @param  int $id 收件地址条目ID
+	 * @param  int $id 收件地址条目ID
 	 * @return bool TRUE表示删除成功，FALSE则删除失败
 	 */
 	public function deleteUserRecipient($id)
@@ -268,7 +268,7 @@ class Passport_Open
 	 * 删除指定职业信息
 	 *
 	 *
-     * @param  int $id 职业信息条目ID
+	 * @param  int $id 职业信息条目ID
 	 * @return bool TRUE表示删除成功，FALSE则删除失败
 	 */
 	public function deleteUserCareer($id)
@@ -280,7 +280,7 @@ class Passport_Open
 	 * 创建当前用户新的联系人
 	 *
 	 *
-     * @param  array $data 新的信息数组
+	 * @param  array $data 新的信息数组
 	 * @return array 创建成功后的联系人条目
 	 */
 	public function createUserContact($data)
@@ -292,8 +292,8 @@ class Passport_Open
 	 * 更新当前用户指定联系人
 	 *
 	 *
-     * @param  int $id 联系人条目ID
-     * @param  array $data 需要更新的信息数组
+	 * @param  int $id 联系人条目ID
+	 * @param  array $data 需要更新的信息数组
 	 * @return array 更新后的联系人
 	 */
 	public function updateUserContact($id, $data)
@@ -305,7 +305,7 @@ class Passport_Open
 	 * 删除当前用户指定联系人
 	 *
 	 *
-     * @param  int $id 收件地址条目ID
+	 * @param  int $id 收件地址条目ID
 	 * @return bool TRUE表示删除成功，FALSE则删除失败
 	 */
 	public function deleteUserContact($id)
@@ -313,14 +313,14 @@ class Passport_Open
 		return $this->_makeRequest("/contacts/id/$id", Zend_Http_Client::DELETE);
 	}
 
-    /**
-     * 发起指定 API 请求
-     *
-     * @param  string $api API路径
-     * @param  string $method http请求Verbs方法
-     * @param  string|array $PayLoadData 经过处理和合理编码后的http内容或数组
-     * @return array|bool  解析后的API响应数据数组；或TRUE表示删除成功
-     */
+	/**
+	 * 发起指定 API 请求
+	 *
+	 * @param  string $api API路径
+	 * @param  string $method http请求Verbs方法
+	 * @param  string|array $PayLoadData 经过处理和合理编码后的http内容或数组
+	 * @return array|bool  解析后的API响应数据数组；或TRUE表示删除成功
+	 */
 	private function _makeRequest($api, $method, $PayLoadData = null)
 	{
 		// 正常响应内容默认以 Json 数据格式返回
@@ -332,23 +332,23 @@ class Passport_Open
 		$this->_client->setMethod($method);
 		// 设置 HTTP 请求数据类型
 		$this->_client->setHeaders('Content-Type', 'application/json');
-		
+
 		// 设置 HTTP Body Payload
-		switch ($method) 
+		switch ($method)
 		{
-            case Zend_Http_Client::GET:
-            case Zend_Http_Client::DELETE:
-                break;
-            case Zend_Http_Client::PUT:
-            case Zend_Http_Client::POST:
-                $this->_client->setRawData(
-                	is_array($PayLoadData) 
-                	? Zend_Json::encode($PayLoadData) 
-                	: $PayLoadData
-                );
-                break;
-        }
-		
+			case Zend_Http_Client::GET:
+			case Zend_Http_Client::DELETE:
+				break;
+			case Zend_Http_Client::PUT:
+			case Zend_Http_Client::POST:
+				$this->_client->setRawData(
+					is_array($PayLoadData)
+					? Zend_Json::encode($PayLoadData)
+					: $PayLoadData
+				);
+				break;
+		}
+
 		// 获取响应数据
 		$response = $this->_client->request();
 		// 解析 HTTP Body Payload
@@ -357,15 +357,15 @@ class Passport_Open
 		$status = $response->getStatus();
 
 		// 根据 HTTP Body Payload 返回数据
-		switch ($status) 
+		switch ($status)
 		{
 			// 删除成功返回TRUE
-            case '204':
-            	return TRUE;
-                break;
-            // 其他操作直接返回解析后的http payload内容
-            default:
-                return Zend_Json::decode($content);
-        }
+			case '204':
+				return TRUE;
+				break;
+			// 其他操作直接返回解析后的http payload内容
+			default:
+				return Zend_Json::decode($content);
+		}
 	}
 }
