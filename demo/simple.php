@@ -1,6 +1,6 @@
 <?php
 /**
- * 本演示
+ * 本演示实现了 OAuth 用户授权认证，并调用一个 API 获取当前用户信息
  *
  * @link https://github.com/cnsaturn/cmcc-passport-open-php-sdk
  */
