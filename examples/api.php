@@ -6,7 +6,7 @@
 	$open_sdk = new Passport_Open(array(
 		'consumerKey' => '2937daedfa310c826d8727384ca8979304f03a6c9', // 填写你在开放平台申请到的应用appKey
 		'consumerSecret' => '2dab22f40f108d3c619804bb80698769', // 填写你在开放平台申请到的应用appSecret
-		'callbackUrl' => 'http://example.com/callback' // 回调 callback 地址
+		'callbackUrl' => 'http://' . $_SERVER ['HTTP_HOST'] . $_SERVER['PHP_SELF'] // 回调 callback 地址
 	));
 	
 	/** 执行 OAuth 1.0a 用户认证授权 */

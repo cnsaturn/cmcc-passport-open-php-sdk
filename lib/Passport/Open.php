@@ -40,12 +40,13 @@ class Passport_Open
 	/**
 	 * API URI 前缀
 	 */
-	const API_ENDPOINT_URL = 'http://120.197.230.234/passport/api';
-
+//	const API_ENDPOINT_URL = 'http://120.197.230.234/passport/api';
+	const API_ENDPOINT_URL = 'http://passport.local/api';
 	/**
 	 * OAuth 鉴权 URI 前缀
 	 */
-	const OAUTH_ENDPOINT_URL = 'http://120.197.230.234/passport/oauth';
+//	const OAUTH_ENDPOINT_URL = 'http://120.197.230.234/passport/oauth';
+	const OAUTH_ENDPOINT_URL = 'http://passport.local/oauth';
 
 	/**
 	 * OAuth 1.0a 鉴权参数
