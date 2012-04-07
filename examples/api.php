@@ -3,24 +3,23 @@
 	require_once dirname(dirname(__FILE__)) . '/lib/Passport/Open.php';
 	
 	/** 初始化 Passport_Open 类 */
-	$open_sdk = new Passport_Open(array(
+	$passport = new Passport_Open(array(
 		'consumerKey' => '2937daedfa310c826d8727384ca8979304f03a6c9', // 填写你在开放平台申请到的应用appKey
 		'consumerSecret' => '2dab22f40f108d3c619804bb80698769', // 填写你在开放平台申请到的应用appSecret
 		'callbackUrl' => 'http://' . $_SERVER ['HTTP_HOST'] . $_SERVER['PHP_SELF'] // 回调 callback 地址
 	));
 	
 	/** 执行 OAuth 1.0a 用户认证授权 */
-	$open_sdk->authenticate();
-
+	$passport->authenticate();
 ?>
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
 <title>API测试</title>
 <style type="text/css">
-body {font-size:12px; text-align:left}
+body {font-size:12px; font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti !important;text-align:left}
 input[type="text"] {margin:5px;width:350px;}
-dd {cursor:pointer;margin-top:5px;}
+dd {cursor:pointer;margin-top:5px;line-height:22px;}
 a{color:#000;text-decoration:none}
 dd:hover,a:hover {color:#FF0000}
 
@@ -29,7 +28,9 @@ dd:hover,a:hover {color:#FF0000}
 </style>
 </head>
 <body>
-<header><h1>测试全部api</h1></header>
+<header>
+	<h1>测试全部api</h1>
+</header>
 <div class="greyborder">
   <dl>
 	<dt>用户帐号API</dt>
@@ -64,27 +65,27 @@ dd:hover,a:hover {color:#FF0000}
 	if($_SERVER["QUERY_STRING"] == "profile")
 	{
 		echo '<pre>';
-		print_r($open_sdk->getUserData("profile"));
+		print_r($passport->getUserData("profile"));
 	}
 	
 	//显示当前用户可以修改的项
 	if($_SERVER["QUERY_STRING"] == "editProfile")
 	{
-		$profile = $open_sdk->getUserData("profile");
+		$profile = $passport->getUserData("profile");
 		?>
 		<form action="?" method="post" enctype="multipart/form-data">
-			<input name="nick_name" type="text" id="nick_name" value="<?php echo $profile["nick_name"] ?>"><br />
+			<input placeholder="用户昵称" name="nick_name" type="text" id="nick_name" value="<?php echo $profile["nick_name"] ?>"><br />
 			<input name="gender" type="radio" id="female" value="female" <?php if($profile["gender"]=="female") echo 'checked'; ?>><label for="female">female</label> 
 			<input name="gender" type="radio" value="male" id="male" <?php if($profile["gender"]=="male") echo 'checked'; ?>><label for="male">male</label> <br />
-			<input name="province" type="text" id="province" value="<?php echo $profile["province"] ?>"><br />
-			<input name="city" type="text" id="city" value="<?php echo $profile["city"] ?>"><br />
-			<input name="area" type="text" id="area" value="<?php echo $profile["area"] ?>"><br />
-			<input name="birth_year" type="text" id="birth_year" value="<?php echo $profile["birth_year"] ?>"><br />
-			<input name="birth_month" type="text" id="birth_month" value="<?php echo $profile["birth_month"] ?>"><br />
-			<input name="birth_day" type="text" id="birth_day" value="<?php echo $profile["birth_day"] ?>"><br />
-			<input name="im_qq" type="text" id="im_qq" value="<?php echo $profile["im_qq"] ?>"><br />
-			<input name="im_msn" type="text" id="im_msn" value="<?php echo $profile["im_msn"] ?>"><br />
-			<input name="im_gtalk" type="text" id="im_gtalk" value="<?php echo $profile["im_gtalk"] ?>"><br />
+			<input placeholder="所在省份（如：广东省）" name="province" type="text" id="province" value="<?php echo $profile["province"] ?>"><br />
+			<input placeholder="所在城市（如：广州市）" name="city" type="text" id="city" value="<?php echo $profile["city"] ?>"><br />
+			<input placeholder="所在区域（如：天河区）" name="area" type="text" id="area" value="<?php echo $profile["area"] ?>"><br />
+			<input placeholder="出生年（如：2012）" name="birth_year" type="text" id="birth_year" value="<?php echo $profile["birth_year"] ?>"><br />
+			<input placeholder="出生月（如：4）" name="birth_month" type="text" id="birth_month" value="<?php echo $profile["birth_month"] ?>"><br />
+			<input placeholder="出生日（如：1）" name="birth_day" type="text" id="birth_day" value="<?php echo $profile["birth_day"] ?>"><br />
+			<input placeholder="QQ号码" name="im_qq" type="text" id="im_qq" value="<?php echo $profile["im_qq"] ?>"><br />
+			<input placeholder="MSN账号" name="im_msn" type="text" id="im_msn" value="<?php echo $profile["im_msn"] ?>"><br />
+			<input placeholder="Gtalk账号" name="im_gtalk" type="text" id="im_gtalk" value="<?php echo $profile["im_gtalk"] ?>"><br />
 			<input name="" type="submit" value="提交">
 			<input name="editProfile" type="hidden" value="1">
 		</form>
@@ -94,7 +95,7 @@ dd:hover,a:hover {color:#FF0000}
 	//显示当前用户可以修改的项，然后修改，提交到这里，更新当前用户信息
 	if(isset($_POST["editProfile"]))
 	{
-		$result = $open_sdk->updateUserProfile(array(
+		$result = $passport->updateUserProfile(array(
 					"nick_name"		=>	$_POST["nick_name"],
 					"gender"		=>	$_POST["gender"],
 					"province"		=>	$_POST["province"],
@@ -123,7 +124,7 @@ dd:hover,a:hover {color:#FF0000}
 		|| $_SERVER["QUERY_STRING"] == "recipients"
 		|| $_SERVER["QUERY_STRING"] == "contacts")
 	{		
-		foreach($open_sdk->getUserData($_SERVER["QUERY_STRING"]) as $key => $val)
+		foreach($passport->getUserData($_SERVER["QUERY_STRING"]) as $key => $val)
 		{
 			?>
 			<pre>
@@ -137,19 +138,19 @@ dd:hover,a:hover {color:#FF0000}
 	//删除当前用户职业信息
 	if(isset($_GET["delcareers"]))
 	{
-		$result = $open_sdk->deleteUserCareer($_GET["delcareers"]);
+		$result = $passport->deleteUserCareer($_GET["delcareers"]);
 		var_dump( $result);
 	}
 	//删除当前用户收货地址
 	if(isset($_GET["delrecipients"]))
 	{
-		$result = $open_sdk->deleteUserRecipient($_GET["delrecipients"]);
+		$result = $passport->deleteUserRecipient($_GET["delrecipients"]);
 		var_dump( $result);
 	}
 	//删除当前用户联系人
 	if(isset($_GET["delcontacts"]))
 	{
-		$result = $open_sdk->deleteUserContact($_GET["delcontacts"]);
+		$result = $passport->deleteUserContact($_GET["delcontacts"]);
 		var_dump( $result);
 	}
 	
@@ -168,7 +169,7 @@ dd:hover,a:hover {color:#FF0000}
 		
 		if($id != 0)
 		{
-			foreach($open_sdk->getUserData('careers') as $key => $val)
+			foreach($passport->getUserData('careers') as $key => $val)
 			{
 				if($val['id'] == $id)
 				{
@@ -206,7 +207,7 @@ dd:hover,a:hover {color:#FF0000}
 		//编辑
 		if($_POST["careersid"] != 0)
 		{
-			$result = $open_sdk->updateUserCareer($_POST["careersid"], array(
+			$result = $passport->updateUserCareer($_POST["careersid"], array(
 								"province"			=>	$_POST["province"],
 								"city"				=>	$_POST["city"],
 								"area"				=>	$_POST["area"],
@@ -220,7 +221,7 @@ dd:hover,a:hover {color:#FF0000}
 		//创建
 		else
 		{
-			$result = $open_sdk->createUserCareer(array(
+			$result = $passport->createUserCareer(array(
 					"province"			=>	$_POST["province"],
 					"city"				=>	$_POST["city"],
 					"area"				=>	$_POST["area"],
@@ -251,7 +252,7 @@ dd:hover,a:hover {color:#FF0000}
 		
 		if($id != 0)
 		{
-			foreach($open_sdk->getUserData('recipients') as $key => $val)
+			foreach($passport->getUserData('recipients') as $key => $val)
 			{
 				if($val['id'] == $id)
 				{
@@ -294,7 +295,7 @@ dd:hover,a:hover {color:#FF0000}
 		//编辑
 		if($_POST["recipientsid"] != 0)
 		{
-			$result = $open_sdk->updateUserRecipient($_POST["recipientsid"], array(
+			$result = $passport->updateUserRecipient($_POST["recipientsid"], array(
 								"recipient"			=>	$_POST["recipient"],
 								"province"			=>	$_POST["province"],
 								"city"				=>	$_POST["city"],
@@ -309,7 +310,7 @@ dd:hover,a:hover {color:#FF0000}
 		//创建
 		else
 		{
-			$result = $open_sdk->createUserRecipient(array(
+			$result = $passport->createUserRecipient(array(
 					"recipient"			=>	$_POST["recipient"],
 					"province"			=>	$_POST["province"],
 					"city"				=>	$_POST["city"],
@@ -342,7 +343,7 @@ dd:hover,a:hover {color:#FF0000}
 		
 		if($id != 0)
 		{
-			foreach($open_sdk->getUserData('contacts') as $key => $val)
+			foreach($passport->getUserData('contacts') as $key => $val)
 			{
 				if($val['id'] == $id)
 				{
@@ -390,7 +391,7 @@ dd:hover,a:hover {color:#FF0000}
 		//编辑
 		if($_POST["contactsid"] != 0)
 		{
-			$result = $open_sdk->updateUserContact($_POST["contactsid"], array(
+			$result = $passport->updateUserContact($_POST["contactsid"], array(
 								"group"			=>	$_POST["group"],
 								"real_name"		=>	$_POST["real_name"],
 								"email"			=>	$_POST["email"],
@@ -406,7 +407,7 @@ dd:hover,a:hover {color:#FF0000}
 		//创建
 		else
 		{
-			$result = $open_sdk->createUserContact(array(
+			$result = $passport->createUserContact(array(
 					"group"			=>	$_POST["group"],
 					"real_name"		=>	$_POST["real_name"],
 					"email"			=>	$_POST["email"],
@@ -424,5 +425,12 @@ dd:hover,a:hover {color:#FF0000}
 	}
 ?>
 </div>
+<br style="clear:both;" />
+<h2>请注意：</h2>
+<ul>
+	<li>请在<a href="http://firefox.com.cn/">Firefox</a>或<a href="http://www.google.com/chrome">Chrome</a>中打开本页面。</li>
+	<li><a href="https://github.com/cnsaturn/cmcc-passport-open-php-sdk/issues">有问题或反馈Bug，请点击此处。</a></li>
+</ul>
+<em>Brought to you by <a href="http://www.situos.com/">Situos</a>.</em>
 </body>
 </html>
