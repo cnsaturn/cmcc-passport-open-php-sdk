@@ -33,7 +33,7 @@
  * @category   CMCC
  * @package	   Passport_Open
  * @copyright  Copyright (c) 2012 Situos Inc. (http://www.situos.com)
- * @license	   http://framework.zend.com/license/new-bsd	 New BSD License
+ * @license	   The MIT License (MIT)
  */
 class Passport_Open
 {
@@ -61,7 +61,7 @@ class Passport_Open
 	 */
 	protected $_consumer;
 
-	/**demodemo
+	/**
 	 * OAuth Token 令牌对象
 	 *
 	 * @var Zend_Oauth_Token
