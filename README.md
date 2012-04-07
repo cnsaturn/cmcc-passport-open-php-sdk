@@ -1,7 +1,12 @@
 中国移动通行证开放平台PHP SDK
 ========
 
-本项目是基于[Zend Framework][ZF]开发的移动通行证平台PHP SDK开发包；支持所有官方提供的API，可用于网站接入型应用和普通应用开发。
+本项目是基于[Zend Framework][ZF]开发的移动通行证平台PHP SDK开发包；支持所有官方提供的[API][API]，可用于网站接入型应用和普通应用开发。
+
+## 运行环境
+
+* PHP 5.2.x + (with cURL enabled)
+* 请在Firefox或Chrome中运行和查看SDK提供的示例代码。
 
 ## 使用示例
 
@@ -10,19 +15,32 @@
 require_once dirname(dirname(__FILE__)) . '/lib/Passport/Open.php';
 
 /** 初始化 Passport_Open 类 */
-$open_sdk = new Passport_Open(array(
-	'consumerKey' => '-->填写你申请到的appkey<--', // 填写你在开放平台申请到的应用appKey
-	'consumerSecret' => '-->填写你申请到的appSecret<--', // 填写你在开放平台申请到的应用appSecret
-	'callbackUrl' => '-->填写授权成功后需要跳转到的URL（比如本php文件的URL）<--' // 回调 callback 地址
+$passport = new Passport_Open(array(
+	'consumerKey' => '2937daedfa310c826d8727384ca8979304f03a6c9', // 填写你在开放平台申请到的应用appKey
+	'consumerSecret' => '2dab22f40f108d3c619804bb80698769', // 填写你在开放平台申请到的应用appSecret
+	'callbackUrl' => 'http://' . $_SERVER ['HTTP_HOST'] . $_SERVER['PHP_SELF'] // 回调 callback 地址(如当前页地址)
 ));
 
 /** 执行 OAuth 1.0a 用户认证授权 */
-$open_sdk->authenticate();
+$passport->authenticate();
 
-/** 更新授权用户基本档案信息 */
-$open_sdk->updateUserProfile(array(
-	'nick_name' => 'Saturn'
-));
+/** 获取授权用户的基本档案信息，并打印出来 */
+var_dump($passport->getUserData('profile'));
 ```
 
+## 入手SDK
+
+了解[OAuth授权认证流程][OAuth]可以从本SDK项目的 examples 入手，
+
+* Simple.php - 实现了 OAuth 用户授权认证，并调用一个 API 获取和打印当前用户信息。
+* Api.php - 以可视化Web界面查看和调试当前官方提供的所有[API][API]方法， 其中包含所有API的调用方法。
+
+如上两个演示用例，均须你注册成为移动用户通行证用户。
+
+## License
+
+The MIT license
+
 [ZF]: http://zendframework.com
+[API]: http://gd.10086.cn/passport/open/wiki
+[OAuth]: http://oauth.net/
