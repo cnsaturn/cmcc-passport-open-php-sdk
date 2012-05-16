@@ -136,7 +136,15 @@ class Passport_Open
 		if( ! empty($_GET))
 		{
 			// 通过解析 URL 中的 GET 字符串，使用 Request Token 交换 Access Token
-			$this->_token = $this->_consumer->getAccessToken($_GET, unserialize($_SESSION['REQUEST_TOKEN']));
+			try
+			{
+			    $this->_token = $this->_consumer->getAccessToken($_GET, unserialize($_SESSION['REQUEST_TOKEN']));
+			}
+			catch (Zend_Oauth_Exception $e)
+			{
+			    echo 'Caught exception: ',  $e->getMessage(), "\n";
+			    exit;
+			}
 
 			// 记录本次获取的 Access Token，以便后续请求复用
 			$_SESSION['ACCESS_TOKEN'] = serialize($this->_token);
@@ -147,7 +155,16 @@ class Passport_Open
 
 		// Case #3: 尚未获取 Request Token
 		// 从开放平台申请一个 Request Token
-		$this->_token = $this->_consumer->getRequestToken();
+		try
+		{
+			$this->_token = $this->_consumer->getRequestToken();
+		}
+		catch (Zend_Oauth_Exception $e)
+		{
+			echo 'Caught exception: ',  $e->getMessage(), "\n";
+			exit;
+		}
+
 
 		// 将 Request Token 临时存储起来
 		$_SESSION['REQUEST_TOKEN'] = serialize($this->_token);
@@ -338,7 +355,16 @@ class Passport_Open
 		}
 
 		// 获取响应数据
-		$response = $this->_client->request();
+		try
+		{
+		   $response = $this->_client->request();
+		}
+		catch (Zend_Oauth_Exception $e)
+		{
+		    echo 'Caught exception: ',  $e->getMessage(), "\n";
+		    exit;
+		}
+		
 		// 解析 HTTP Body Payload
 		$content = $response->getBody();
 		// HTTP 响应码
