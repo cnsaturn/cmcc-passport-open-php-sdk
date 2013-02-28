@@ -39,8 +39,6 @@ var_dump($passport->getUserData('profile'));
 
 ## 联系作者
 
-Copyright (c) 2012 Situos Inc. ([http://www.situos.com][situos])
-
 * [反馈Bug][issues]
 * [问题咨询][issues]
 
